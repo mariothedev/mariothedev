@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Mario Callejas — fullstack dev. Products shipped, and ways to get in touch.">
+<title>Mario Callejas — fullstack dev</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Nord — Polar Night */
+    --nord0:#2E3440; --nord1:#3B4252; --nord2:#434C5E; --nord3:#9CA8C0;;
+    /* Nord — Snow Storm */
+    --nord4:#D8DEE9; --nord5:#E5E9F0; --nord6:#ECEFF4;
+    /* Nord — Frost */
+    --nord7:#8FBCBB; --nord8:#88C0D0; --nord9:#81A1C1; --nord10:#5E81AC;
+    /* Nord — Aurora */
+    --nord11:#BF616A; --nord12:#D08770; --nord13:#EBCB8B; --nord14:#A3BE8C; --nord15:#B48EAD;
+
+    --page:#242933;            /* a touch under nord0 so the window lifts off the page */
+    --mono:'JetBrains Mono','SF Mono','Cascadia Code',Consolas,'Liberation Mono',monospace;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(120% 90% at 50% 0%, #2b313d 0%, var(--page) 55%, #1f242d 100%);
+    color:var(--nord4);
+    font-family:var(--mono);
+    font-size:15px;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:clamp(14px,4vw,40px);
+  }
+
+  /* ── Terminal window ───────────────────────────────────────────── */
+  .term{
+    width:100%;
+    max-width:880px;
+    background:var(--nord0);
+    border:1px solid var(--nord2);
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 28px 70px -20px rgba(0,0,0,.6), 0 0 0 1px rgba(0,0,0,.2);
+  }
+
+  .titlebar{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 14px;
+    background:var(--nord1);
+    border-bottom:1px solid var(--nord2);
+    color:var(--nord3);
+    font-size:12.5px;
+  }
+  .dots{display:flex; gap:7px;}
+  .dot{width:11px; height:11px; border-radius:50%; }
+  .dot.r{background:var(--nord11);}
+  .dot.y{background:var(--nord13);}
+  .dot.g{background:var(--nord14);}
+  .titlebar .path{margin-left:6px;}
+  .titlebar .tag{margin-left:auto; color:var(--nord3);}
+
+  .screen{padding:clamp(16px,3vw,26px) clamp(16px,3.4vw,30px) clamp(14px,2.6vw,22px);}
+
+  /* the typed command line at the top */
+  .cmd{margin:2px 0 20px; white-space:nowrap; color:var(--nord4);}
+  .cmd .user{color:var(--nord14);}
+  .cmd .at{color:var(--nord4);}
+  .cmd .host{color:var(--nord8);}
+  .cmd .sep{color:var(--nord4);}
+  .cmd .prompt{color:var(--nord13); margin:0 8px 0 2px;}
+  .cmd .typed{color:var(--nord6);}
+  .cmd .blink{display:inline-block; width:9px; height:1.05em; background:var(--nord4);
+    transform:translateY(2px); margin-left:2px; animation:blink 1.05s step-end infinite;}
+
+  /* ── neofetch-style two-column readout ─────────────────────────── */
+  .fetch{
+    display:flex;
+    gap:clamp(18px,3.4vw,38px);
+    align-items:flex-start;
+  }
+
+  /* left: the "logo" slot = image placeholder */
+  .portrait{flex:0 0 auto; width:clamp(150px,22vw,196px);}
+  .portrait .frame-label{color:var(--nord3); font-size:12px; margin-bottom:6px;}
+  .portrait .frame{
+    position:relative;
+    aspect-ratio:1/1;
+    border:1px dashed var(--nord3);
+    border-radius:6px;
+    background:
+      repeating-linear-gradient(135deg, rgba(76,86,106,.16) 0 2px, transparent 2px 9px),
+      var(--nord1);
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+    color:var(--nord3);
+    text-align:center;
+  }
+  .portrait .frame .ph{font-size:12.5px; line-height:1.6; padding:10px;}
+  .portrait .frame .ph .glyph{font-size:30px; color:var(--nord3); display:block; margin-bottom:6px;}
+  /* swap the placeholder for a real photo: drop an <img> inside .frame and it fills the box */
+  .portrait .frame img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+
+  /* right: the info column */
+  .info{flex:1 1 auto; min-width:0;}
+
+  .name{
+    font-size:clamp(20px,4.6vw,27px);
+    font-weight:700;
+    color:var(--nord8);
+    letter-spacing:.3px;
+    line-height:1.2;
+  }
+  .role{color:var(--nord9); margin-top:2px; font-size:14px;}
+  .rule{height:1px; background:var(--nord2); margin:14px 0 16px; border-radius:1px;}
+
+  .section + .section{margin-top:18px;}
+  .section-label{
+    color:var(--nord13);
+    font-weight:500;
+    font-size:13.5px;
+    margin-bottom:6px;
+  }
+  .section-label .hash{color:var(--nord3); margin-right:7px;}
+
+  .entry{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    width:100%;
+    padding:4px 8px;
+    margin:0 -8px;
+    border-radius:5px;
+    text-decoration:none;
+    color:var(--nord4);
+    font:inherit;
+    text-align:left;
+    background:none;
+    border:0;
+    cursor:pointer;
+    transition:background-color .14s ease, color .14s ease;
+  }
+  .entry .bullet{color:var(--nord8); flex:0 0 auto; transition:transform .18s ease;}
+  .entry .nm{color:var(--nord9); font-weight:500; flex:0 0 auto;}
+  .entry .desc{color:var(--nord3); flex:1 1 auto; min-width:0; white-space:nowrap;
+    overflow:hidden; text-overflow:ellipsis;}
+  .entry .arrow{color:var(--nord3); flex:0 0 auto; margin-left:auto; transition:transform .14s ease, color .14s ease;}
+
+  .entry:hover, .entry:focus-visible{background:var(--nord1); color:var(--nord6); outline:none;}
+  .entry:hover .nm, .entry:focus-visible .nm{color:var(--nord7);}
+  .entry:hover .arrow, .entry:focus-visible .arrow{color:var(--nord8); transform:translateX(3px);}
+  .entry:focus-visible{box-shadow:inset 0 0 0 1px var(--nord8);}
+
+  /* ── product backstory: click to expand (▸ rotates to ▾) ───────── */
+  .entry[aria-expanded="true"] .bullet{transform:rotate(90deg);}
+  .entry[aria-expanded="true"] .nm{color:var(--nord7);}
+
+  .story-wrap{display:grid; grid-template-rows:0fr; transition:grid-template-rows .26s ease;}
+  .story-clip{overflow:hidden; min-height:0; visibility:hidden; transition:visibility .26s ease;}
+  .product.open > .story-wrap{grid-template-rows:1fr;}
+  .product.open > .story-wrap > .story-clip{visibility:visible;}
+
+  .story{padding:6px 8px 12px 26px;}
+  .story p{
+    margin:0 0 10px;
+    color:var(--nord4);
+    font-size:13.5px;
+    line-height:1.65;
+    border-left:2px solid var(--nord2);
+    padding-left:12px;
+  }
+  .visit{
+    display:inline-block;
+    margin-left:14px;
+    color:var(--nord8);
+    text-decoration:none;
+    font-size:13px;
+    border-bottom:1px solid transparent;
+    transition:border-color .14s ease;
+  }
+  .visit:hover, .visit:focus-visible{border-bottom-color:var(--nord8); outline:none;}
+  .visit:focus-visible{color:var(--nord7);}
+
+  /* ── technologies: wrapped token chips ─────────────────────────── */
+  .stack{display:flex; flex-wrap:wrap; gap:7px; margin:0 -2px;}
+  .chip{
+    font-size:13px;
+    color:var(--nord8);
+    background:var(--nord1);
+    border:1px solid var(--nord2);
+    border-radius:5px;
+    padding:2px 9px;
+  }
+
+  @keyframes blink{0%,49%{opacity:1;} 50%,100%{opacity:0;}}
+
+  /* reveal animation — only applied when JS opts in (motion allowed) */
+  .is-animating .reveal{opacity:0; transform:translateY(5px);}
+  .is-animating .reveal.shown{opacity:1; transform:none; transition:opacity .34s ease, transform .34s ease;}
+
+  /* ── responsive: stack on narrow screens ───────────────────────── */
+  @media (max-width:560px){
+    body{font-size:14px; align-items:flex-start;}
+    .fetch{flex-direction:column; align-items:center;}
+    .portrait{width:min(180px,60%);}
+    .info{width:100%;}
+    .name,.role{text-align:center;}
+    .cmd{white-space:normal;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .cmd .blink{animation:none;}
+    .story-wrap, .story-clip{transition:none;}
+  }
+</style>
+</head>
+<body>
+  <main class="term" role="main">
+    <div class="titlebar">
+      <span class="dots" aria-hidden="true">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+      </span>
+      <span class="path">~/mario — zsh</span>
+      <span class="tag">80×24</span>
+    </div>
+
+    <div class="screen">
+      <!-- typed command -->
+      <div class="cmd" aria-hidden="true">
+        <span class="user">mario</span><span class="at">@</span><span class="host">callejas</span><span class="sep">:~$</span>
+        <span class="typed" id="typed">whoami</span><span class="blink" id="blink"></span>
+      </div>
+
+      <!-- neofetch-style output -->
+      <div class="fetch">
+        <!-- LEFT: image placeholder (the "logo" slot) -->
+        <div class="portrait reveal">
+          <div class="frame-label">portrait.png</div>
+          <div class="frame">
+            <img src="https://avatars.githubusercontent.com/u/6800783?v=4" alt="Mario Callejas">
+            <!-- <div class="ph"> -->
+            <!--   <span class="glyph" aria-hidden="true">◍</span> -->
+            <!--   image -->
+            <!-- </div> -->
+          </div>
+        </div>
+
+        <!-- RIGHT: the info readout -->
+        <div class="info">
+          <h1 class="name reveal">Mario Callejas</h1>
+          <div class="role reveal">Fullstack dev in Oslo, Norway.</div>
+          <div class="rule reveal"></div>
+
+          <!-- ▸ each product expands its backstory on click.
+               replace the name, desc, story text and the visit href. -->
+          <section class="section">
+            <div class="section-label reveal"><span class="hash">#</span>Products I've shipped</div>
+
+            <div class="product reveal">
+              <button class="entry" aria-expanded="false" aria-controls="story-acme">
+                <span class="bullet" aria-hidden="true">▸</span>
+                <span class="nm">acme-dashboard</span>
+                <span class="desc">— real-time analytics for ops teams</span>
+              </button>
+              <div class="story-wrap"><div class="story-clip"><div class="story" id="story-acme">
+                <p>Built after watching an ops team refresh five tabs to answer one question. Started as a weekend prototype, grew into the team's default morning dashboard handling millions of events a day.</p>
+                <a class="visit" href="#" target="_blank" rel="noopener">visit acme-dashboard →</a>
+              </div></div></div>
+            </div>
+
+            <div class="product reveal">
+              <button class="entry" aria-expanded="false" aria-controls="story-quickship">
+                <span class="bullet" aria-hidden="true">▸</span>
+                <span class="nm">quickship</span>
+                <span class="desc">— one-command deploys to the edge</span>
+              </button>
+              <div class="story-wrap"><div class="story-clip"><div class="story" id="story-quickship">
+                <p>Deploying a side project shouldn't take an afternoon of YAML. quickship turns it into a single command — it reads your project, picks sane defaults, and ships to the edge in seconds.</p>
+                <a class="visit" href="#" target="_blank" rel="noopener">visit quickship →</a>
+              </div></div></div>
+            </div>
+
+            <div class="product reveal">
+              <button class="entry" aria-expanded="false" aria-controls="story-notekeeper">
+                <span class="bullet" aria-hidden="true">▸</span>
+                <span class="nm">notekeeper</span>
+                <span class="desc">— offline-first markdown notes</span>
+              </button>
+              <div class="story-wrap"><div class="story-clip"><div class="story" id="story-notekeeper">
+                <p>A notes app that trusts your files. Everything is plain markdown on your own disk, syncs when it can, and never holds your writing hostage behind a login or an export button.</p>
+                <a class="visit" href="#" target="_blank" rel="noopener">visit notekeeper →</a>
+              </div></div></div>
+            </div>
+          </section>
+
+          <!-- ▸ swap in the tools you actually reach for -->
+          <section class="section">
+            <div class="section-label reveal"><span class="hash">#</span>Technologies I know</div>
+            <div class="stack reveal">
+              <span class="chip">TypeScript</span>
+              <span class="chip">React</span>
+              <span class="chip">Node.js</span>
+              <span class="chip">Python</span>
+              <span class="chip">PostgreSQL</span>
+              <span class="chip">Redis</span>
+              <span class="chip">Docker</span>
+              <span class="chip">AWS</span>
+              <span class="chip">Tailwind</span>
+              <span class="chip">GraphQL</span>
+            </div>
+          </section>
+
+          <!-- ▸ point these at your real LinkedIn / resume file / email -->
+          <section class="section">
+            <div class="section-label reveal"><span class="hash">#</span>Links</div>
+
+            <a class="entry reveal" href="https://www.linkedin.com/in/your-handle" target="_blank" rel="noopener">
+              <span class="bullet" aria-hidden="true">▸</span>
+              <span class="nm">LinkedIn</span>
+              <span class="desc">— /in/your-handle</span>
+              <span class="arrow" aria-hidden="true">→</span>
+            </a>
+
+            <a class="entry reveal" href="resume.pdf" target="_blank" rel="noopener">
+              <span class="bullet" aria-hidden="true">▸</span>
+              <span class="nm">Résumé</span>
+              <span class="desc">— resume.pdf</span>
+              <span class="arrow" aria-hidden="true">→</span>
+            </a>
+
+            <a class="entry reveal" href="mailto:mario@example.com">
+              <span class="bullet" aria-hidden="true">▸</span>
+              <span class="nm">Email</span>
+              <span class="desc">— mario@example.com</span>
+              <span class="arrow" aria-hidden="true">→</span>
+            </a>
+          </section>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+<script>
+(function(){
+  // Product backstories — expand/collapse on click (works regardless of motion pref)
+  document.querySelectorAll('.product > .entry').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var open = btn.parentElement.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  });
+
+  // Load animation — typed command, then staggered reveal
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var typed  = document.getElementById('typed');
+  var reveals = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+
+  if(reduce){ return; } // content is already fully visible; honour the preference
+
+  document.body.classList.add('is-animating');
+
+  var word = typed.textContent;
+  typed.textContent = '';
+
+  var i = 0;
+  function type(){
+    if(i <= word.length){
+      typed.textContent = word.slice(0, i);
+      i++;
+      setTimeout(type, 70);
+    } else {
+      revealLines();
+    }
+  }
+  function revealLines(){
+    reveals.forEach(function(el, idx){
+      setTimeout(function(){ el.classList.add('shown'); }, idx * 75);
+    });
+  }
+  setTimeout(type, 320);
+})();
+</script>
+</body>
+</html>
