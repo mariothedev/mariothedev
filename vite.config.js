@@ -7,5 +7,8 @@ export default defineConfig({
   preview: {
     host: true,                  // bind 0.0.0.0 so the container is reachable from outside
     port: 4173,
+    allowedHosts: ['mariothedev.com', 'www.mariothedev.com'],
+    // simpler option — allow any host (fine for a static personal site):
+    // allowedHosts: true,
   },
 })
